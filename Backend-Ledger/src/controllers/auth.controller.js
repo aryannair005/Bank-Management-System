@@ -1,6 +1,7 @@
 const userModel = require("../models/user.model.js")
 const jwt = require("jsonwebtoken")
 const bcrypt=require("bcryptjs")
+const emailService=require("../services/email.service.js")
 
 
 /**
@@ -44,7 +45,7 @@ const register=async(req,res)=>{
 
     res.cookie("token",token)
 
-    return res.status(201).json({
+    res.status(201).json({
         message:"User registered successfully",
         user:{
             _id:user._id,
@@ -53,6 +54,9 @@ const register=async(req,res)=>{
         },
         token
     })
+
+    await emailService.sendRegistrationEmail(user.email,user.name)
+
 }
 
 
@@ -96,7 +100,7 @@ const login=async(req,res)=>{
 
     res.cookie("token",token)
 
-    return res.status(200).json({
+    res.status(200).json({
         message:"User logged in successfully",
         user:{
             _id:user._id,
@@ -105,6 +109,7 @@ const login=async(req,res)=>{
         },
         token
     })
+    await emailService.sendLoginNotificationEmail(user.email,user.name)
 }
 
 module.exports={
