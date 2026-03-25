@@ -2,6 +2,24 @@ const userModel = require("../models/user.model.js")
 const jwt = require("jsonwebtoken")
 const bcrypt=require("bcryptjs")
 
+
+/**
+ * @route   POST /api/auth/register
+ * @desc    Register a new user
+ * @access  Public
+ * 
+ * @body
+ * {
+ *   "email": "string",
+ *   "name": "string",
+ *   "password": "string"
+ * }
+ * 
+ * @returns
+ * 201 - User registered successfully
+ * 422 - User already exists
+ */
+
 const register=async(req,res)=>{
     const {email,name,password} = req.body
 
@@ -36,6 +54,23 @@ const register=async(req,res)=>{
         token
     })
 }
+
+
+/**
+ * @route   POST /api/auth/login
+ * @desc    Login user and generate JWT
+ * @access  Public
+ * 
+ * @body
+ * {
+ *   "email": "string",
+ *   "password": "string"
+ * }
+ * 
+ * @returns
+ * 200 - Login successful
+ * 401 - Invalid credentials
+ */
 
 const login=async(req,res)=>{
     const {email,password} = req.body
